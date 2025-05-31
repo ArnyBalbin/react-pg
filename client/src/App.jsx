@@ -1,35 +1,28 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Header } from "./components/Header";
+import { ListaEditoriales } from "./pages/ListaEditoriales";
+import { ListaLibros } from "./pages/ListaLibros";
+import { EditarLibro } from "./pages/EditarLibro";
+import { AgregarLibro } from "./pages/AgregarLibro";
+import { NotFound } from "./pages/NotFound"; // Nuevo componente para rutas no encontradas
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <Router>
+      <div className="container">
+        <Header />
+        <div className="mt-4"> {/* Agregar margen superior para separar del header */}
+          <Routes>
+            <Route path="/editoriales" element={<ListaEditoriales />} />
+            <Route path="/" element={<ListaLibros />} />
+            <Route path="/agregar" element={<AgregarLibro />} />
+            <Route path="/editar/:id" element={<EditarLibro />} />
+            <Route path="*" element={<NotFound />} /> {/* Manejar rutas no encontradas */}
+          </Routes>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </Router>
+  );
 }
 
-export default App
+export default App;
