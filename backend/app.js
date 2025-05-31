@@ -8,18 +8,21 @@ import dotenv from 'dotenv';
 
 const app = express();
 
+sequelize.sync()
+  .then(() => console.log('BD conectada'))
+  .catch(err => console.error('Error conectando BD:', err));
+  
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
-sequelize.sync()
-  .then(() => console.log('BD conectada'))
-  .catch(err => console.error('Error conectando BD:', err));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const allowedOrigins = [
   'http://localhost:5173',
-
+  
 ];
 
 app.use(cors({
@@ -36,23 +39,9 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 app.use('/uploads', express.static('uploads'));
 
 app.use('/api', routes);
-
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'client/build')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-  });
-} else {
-  app.use((req, res) => {
-    res.status(404).json({ message: 'Ruta no encontrada' });
-  });
-}
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
