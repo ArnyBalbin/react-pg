@@ -10,6 +10,18 @@ export const getAllLibros = async (req, res) => {
   }
 };
 
+export const getLibro = async (req, res) => {
+  try {
+    const libro = await Libro.findByPk(req.params.id, { include: Editorial });
+    if (!libro) {
+      return res.status(404).json({ error: 'Libro no encontrado' });
+    }
+    res.json(libro);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export const createLibro = async (req, res) => {
   try {
     const { titulo, autor, anio, EditorialId } = req.body;

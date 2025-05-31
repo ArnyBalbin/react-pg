@@ -4,22 +4,47 @@ import { ListaEditoriales } from "./pages/ListaEditoriales";
 import { ListaLibros } from "./pages/ListaLibros";
 import { EditarLibro } from "./pages/EditarLibro";
 import { AgregarLibro } from "./pages/AgregarLibro";
-import { NotFound } from "./pages/NotFound"; // Nuevo componente para rutas no encontradas
+import { useState } from 'react';
 
 function App() {
+  const [successMessage, setSuccessMessage] = useState('');
+
   return (
     <Router>
-      <div className="container">
+      <div className="container py-4">
         <Header />
-        <div className="mt-4"> {/* Agregar margen superior para separar del header */}
-          <Routes>
-            <Route path="/editoriales" element={<ListaEditoriales />} />
-            <Route path="/" element={<ListaLibros />} />
-            <Route path="/agregar" element={<AgregarLibro />} />
-            <Route path="/editar/:id" element={<EditarLibro />} />
-            <Route path="*" element={<NotFound />} /> {/* Manejar rutas no encontradas */}
-          </Routes>
-        </div>
+        
+        {successMessage && (
+          <div className="alert alert-success alert-dismissible fade show mt-3" role="alert">
+            {successMessage}
+            <button 
+              type="button" 
+              className="btn-close" 
+              data-bs-dismiss="alert" 
+              aria-label="Close"
+              onClick={() => setSuccessMessage('')}
+            ></button>
+          </div>
+        )}
+        
+        <Routes>
+          <Route 
+            path="/editoriales" 
+            element={<ListaEditoriales setSuccessMessage={setSuccessMessage} />} 
+          />
+          <Route 
+            path="/" 
+            element={<ListaLibros setSuccessMessage={setSuccessMessage} />} 
+          />
+          <Route 
+            path="/agregar" 
+            element={<AgregarLibro setSuccessMessage={setSuccessMessage} />} 
+          />
+          <Route 
+            path="/editar/:id" 
+            element={<EditarLibro setSuccessMessage={setSuccessMessage} />} 
+          />
+        </Routes>
       </div>
     </Router>
   );
